@@ -36,14 +36,27 @@ describe RegistrationCompletion do
 
   describe '#register' do
     context 'when a user is successfully created' do
-      it 'returns the user' do
-        registered_user, _ = subject.register
-        expect(registered_user).to have_attributes(email: email, username: username)
+      context 'when it creates a bucket successfully' do
+        it 'returns the user' do
+          registered_user, _ = subject.register
+          expect(registered_user).to have_attributes(email: email, username: username)
+        end
+
+        it 'returns no errors' do
+          _, errors = subject.register
+          expect(errors).to be_blank
+        end
       end
 
-      it 'returns no errors' do
-        _, errors = subject.register
-        expect(errors).to be_blank
+      context 'when it fails to create a bucket' do
+        before do
+          allow(user).to receive(:create_bucket).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it 'deletes the user and raises exception' do
+          expect{subject.register}.to raise_exception(RegistrationCompletion::RegistrationError)
+          expect(User.find_by(email: email)).to be_nil
+        end
       end
     end
 

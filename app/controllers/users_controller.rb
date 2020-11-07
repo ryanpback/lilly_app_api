@@ -16,6 +16,8 @@ class UsersController < ApplicationController
     }
 
     render json: response, status: :created
+  rescue RegistrationCompletion::RegistrationError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
   def login
