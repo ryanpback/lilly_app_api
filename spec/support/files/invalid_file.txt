@@ -1,0 +1,1 @@
+This has a file type that is not in the allowed list for ImageValidator

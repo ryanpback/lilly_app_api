@@ -1,0 +1,69 @@
+require 'yaml'
+require 'yaml/store'
+
+class ImageValidator
+  IMAGE_UPLOAD_NAME =
+    Rails.application.credentials.image_upload_name.to_sym.freeze
+  ALLOWED_IMAGE_TYPES = %w(
+    image/gif
+    image/jpeg
+    image/jpg
+    image/png
+    image/heic
+    video/quicktime
+  )
+
+  attr_accessor :image, :error, :status
+
+  def initialize(params)
+    @image = params[IMAGE_UPLOAD_NAME]
+  end
+
+  def self.validate!(params:)
+    self.new(params).determine_validity
+  end
+
+  def determine_validity
+    unless file_present?
+      set_file_not_present_error
+      return self
+    end
+
+    set_file_incorrect_type unless valid_file_type?
+    self
+  end
+
+  def file_present?
+    image.present?
+  end
+
+  private
+
+  def valid_file_type?
+
+    store = YAML::Store.new 'image.yaml'
+
+    file_type =
+      IO.popen(
+        ["file", "--brief", "--mime-type", image.path],
+        in: :close, err: :close
+      ) { |io| io.read.chomp }
+
+    ALLOWED_IMAGE_TYPES.include?(file_type)
+  end
+
+  def allowed_file_types
+    self.class::ALLOWED_IMAGE_TYPES.join(', ')
+  end
+
+  def set_file_incorrect_type
+    self.error =
+      "File type not allowed. Permitted file types: #{allowed_file_types}"
+    self.status = :unsupported_media_type
+  end
+
+  def set_file_not_present_error
+    self.error = 'No image present in upload.'
+    self.status = :unprocessable_entity
+  end
+end
