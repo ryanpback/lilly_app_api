@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   def register
     @user         = User.new(user_params)
     @user, errors = RegistrationCompletion.complete_registration(user: @user)
+    @user, errors = RegistrationService.complete_registration(user: @user)
 
     unless errors.blank?
       return render json: { error: errors.to_hash(true) }, status: :conflict
@@ -17,6 +18,7 @@ class UsersController < ApplicationController
 
     render json: response, status: :created
   rescue RegistrationCompletion::RegistrationError => e
+  rescue RegistrationService::RegistrationError => e
     render json: { error: e.message }, status: :internal_server_error
   end
 

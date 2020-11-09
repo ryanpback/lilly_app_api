@@ -1,4 +1,4 @@
-class RegistrationCompletion
+class RegistrationService
   class RegistrationError < StandardError; end
 
   attr_accessor :user

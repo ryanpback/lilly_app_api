@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RegistrationCompletion do
+describe RegistrationService do
   let(:first_name) { 'Test' }
   let(:last_name) { 'User' }
   let(:username) { 'testuser' }
@@ -25,7 +25,7 @@ describe RegistrationCompletion do
       allow(described_class).to receive(:new).and_return(subject)
     end
 
-    context 'when called, it creates a RegistrationCompletion instance' do
+    context 'when called, it creates a RegistrationService instance' do
       it 'calls #register' do
         expect(described_class).to receive(:new).with(user)
         expect(subject).to receive(:register)
@@ -54,7 +54,7 @@ describe RegistrationCompletion do
         end
 
         it 'deletes the user and raises exception' do
-          expect{subject.register}.to raise_exception(RegistrationCompletion::RegistrationError)
+          expect{subject.register}.to raise_exception(RegistrationService::RegistrationError)
           expect(User.find_by(email: email)).to be_nil
         end
       end
