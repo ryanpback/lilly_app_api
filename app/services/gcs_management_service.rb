@@ -31,7 +31,8 @@ class GcsManagementService
 
   def delete_file(filename:)
     file = get_file(filename: filename)
-    file.delete if file
+    return file.delete if file
+    true
   end
 
   def delete_bucket
