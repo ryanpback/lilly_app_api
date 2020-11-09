@@ -33,12 +33,14 @@ describe BucketService do
       before do
         allow(image).to receive(:valid?).and_return(false)
         allow(gcs_service).to receive(:delete_file).with(filename: filename).and_return(true)
+        # fake image errors
+        image.errors.add(:base)
       end
 
       it 'calls GcsManagementService to delete the file from the bucket' do
         expect(gcs_service).to receive(:delete_file).with(filename: filename)
         image = subject.save_image!(filename: filename)
-        expect(image.errors).to be_blank
+        expect(image.errors).to_not be_blank
         expect(image.filename).to eq(filename)
       end
     end
