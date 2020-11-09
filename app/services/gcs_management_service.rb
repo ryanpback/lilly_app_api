@@ -34,6 +34,12 @@ class GcsManagementService
     file.delete if file
   end
 
+  def delete_bucket
+    bucket.files.each { |f| f.delete }
+    return true if bucket.delete
+    false
+  end
+
   private
 
   def bucket

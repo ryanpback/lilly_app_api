@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  skip_before_action :authorize, except: %i[auto_login]
+  skip_before_action :authorize,
+    only: %i[register login]
 
   def register
     @user         = User.new(user_params)
-    @user, errors = RegistrationCompletion.complete_registration(user: @user)
     @user, errors = RegistrationService.complete_registration(user: @user)
 
     unless errors.blank?
@@ -17,7 +17,6 @@ class UsersController < ApplicationController
     }
 
     render json: response, status: :created
-  rescue RegistrationCompletion::RegistrationError => e
   rescue RegistrationService::RegistrationError => e
     render json: { error: e.message }, status: :internal_server_error
   end
@@ -47,8 +46,15 @@ class UsersController < ApplicationController
     end
   end
 
-  def auto_login
-    render json: @current_user, status: :ok
+  def destroy
+    user_deleted =
+      RegistrationService.unregister_user(user: @current_user)
+
+    if user_deleted
+      render json: { message: 'Successfully unregistered from LillyApp' }, status: :no_content
+    else
+      render json: { error: 'Failed to unregister. Please try again.' }, status: :reset_content
+    end
   end
 
   private

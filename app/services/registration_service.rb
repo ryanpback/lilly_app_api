@@ -11,6 +11,10 @@ class RegistrationService
     self.new(user).register
   end
 
+  def self.unregister_user(user:)
+    self.new(user).unregister
+  end
+
   # Save user and create a bucket to get a unique bucket UUID.
   # If, for some reason, the bucket fails on creation,
   # delete the user and raise and exception
@@ -26,5 +30,21 @@ class RegistrationService
     end
 
     return user, user.errors
+  end
+
+  def unregister
+    bucket = user.bucket
+    deleted_from_gcs =
+      GcsManagementService.new(bucket.id).delete_bucket
+
+    unless deleted_from_gcs
+      return false
+    end
+
+    unless bucket.destroy
+      return false
+    end
+
+    user.destroy
   end
 end
