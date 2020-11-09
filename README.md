@@ -88,8 +88,13 @@ Run tests with `rspec` from the root directory
 
 ## Meta
 Ryan Back
-Twitter: @ryanpback
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Twitter: [@ryanpback](https://twitter.com/ryanpback)
+
 Email: ryanpback@gmail.com
+
 Github: https://github.com/ryanpback
 
 ## Contributing
