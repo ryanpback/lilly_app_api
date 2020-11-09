@@ -119,7 +119,7 @@ describe RegistrationService do
       before do
         allow(gcs_service).to receive(:delete_bucket).and_return(true)
         allow(bucket).to receive(:destroy).and_return(bucket_deletion_status)
-        allow(registered_user).to receive(:destroy).and_return(user_deletion_status)
+        allow(registered_user).to receive(:destroyed?).and_return(user_deletion_status)
       end
 
       context 'when the user and bucket is deleted successfully' do
@@ -136,6 +136,7 @@ describe RegistrationService do
         it 'returns false' do
           expect(bucket).to receive(:destroy)
           expect(registered_user).to_not receive(:destroy)
+          expect(registered_user).to_not receive(:destroyed?)
           expect(registered_user_subject.unregister).to eq false
         end
       end
@@ -146,6 +147,7 @@ describe RegistrationService do
         it 'returns false' do
           expect(bucket).to receive(:destroy)
           expect(registered_user).to receive(:destroy)
+          expect(registered_user).to receive(:destroyed?)
           expect(registered_user_subject.unregister).to eq false
         end
       end

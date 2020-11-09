@@ -46,5 +46,7 @@ class RegistrationService
     end
 
     user.destroy
+
+    user.destroyed?
   end
 end
