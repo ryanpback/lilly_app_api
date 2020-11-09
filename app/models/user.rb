@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_one :bucket, dependent: :destroy
+  has_many :images, through: :bucket
 
   has_secure_password
 
