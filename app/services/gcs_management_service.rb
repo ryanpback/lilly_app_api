@@ -21,12 +21,17 @@ class GcsManagementService
     create_bucket unless bucket_exists?
 
     uploaded_file = bucket.create_file(file.path, file.original_filename)
-    upload_file.name
+    uploaded_file.name
   end
 
   def get_file(filename:)
     file_path = "#{bucket_name}/#{filename}"
     bucket.file(file_path)
+  end
+
+  def delete_file(filename:)
+    file = get_file(filename: filename)
+    file.delete if file
   end
 
   private
