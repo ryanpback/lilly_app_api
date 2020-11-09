@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authorize, except: %i[auto_login]
 
   def register
-    @user = User.new(user_params)
+    @user         = User.new(user_params)
     @user, errors = RegistrationCompletion.complete_registration(user: @user)
 
     unless errors.blank?
