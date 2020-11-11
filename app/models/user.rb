@@ -14,4 +14,10 @@ class User < ApplicationRecord
       on: :create
     }
     validates :password, presence: true, length: 10..30
+
+  def user_image_by_id(image_id)
+    images.where(id: image_id)
+      .select('images.id, buckets.id as bucket_id, images.filename')
+      .first
+  end
 end

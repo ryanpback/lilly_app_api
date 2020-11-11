@@ -16,6 +16,33 @@ describe User do
     }
   }
   let(:user) { described_class.create(params) }
+  let(:bucket) { user.create_bucket }
+  let(:filename1) { 'testfile1' }
+  let(:filename2) { 'testfile2' }
+  let(:image1) { bucket.images.create(filename: filename1) }
+  let(:image2) { bucket.images.create(filename: filename2) }
+
+  describe '#user_image_by_id' do
+    it 'should return an image' do
+      expect(user.user_image_by_id(image1.id)).to be_kind_of(Image)
+    end
+
+    it 'should return the bucket id that the image queried by id belongs to' do
+      expect(user.user_image_by_id(image1.id).bucket_id).to eq(bucket.id)
+    end
+
+    it 'should return the image with the ID that was passed in' do
+      image = user.user_image_by_id(image1.id)
+      expect(image.id).to eq(image1.id)
+      expect(image.id).to_not eq(image2.id)
+    end
+
+    it 'should return the filename of the image queried by id' do
+      image = user.user_image_by_id(image1.id)
+      expect(image.filename).to eq(filename1)
+      expect(image.filename).to_not eq(filename2)
+    end
+  end
 
   describe ".create_user" do
     context 'when all data is present and valid' do
