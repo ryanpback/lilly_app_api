@@ -6,7 +6,7 @@ Lilly App API is an API for a mobile app where users can take and store pictures
 My daughter is growing before my eyes - we take a lot of pictures. I wanted a place that my wife and I could upload all the pictures/videos we take of her to be in a shared location that we can share with other family members.
 
 ## Code Style
-I'll eventually getting around to using Rubocop and define the code style in there.
+Style defined in .rubocop.yml. Work in progress
 
 ## Tech/Framework used
 * Rails - API only
