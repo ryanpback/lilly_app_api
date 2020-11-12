@@ -84,4 +84,23 @@ Style/MixinUsage:
   Exclude:
     - 'spec/**/*'
 
-
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: false
+Lint/EmptyBlock:
+  Enabled: false
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: false
+Lint/ToEnumArguments:
+  Enabled: false
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: false
+Style/ArgumentsForwarding:
+  Enabled: false
+Style/CollectionCompact:
+  Enabled: false
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
+Style/NegatedIfElseCondition:
+  Enabled: false
+Style/SwapValues:
+  Enabled: false
