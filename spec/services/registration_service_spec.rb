@@ -6,15 +6,15 @@ describe RegistrationService do
   let(:username) { 'testuser' }
   let(:email) { 'testuser@test.com' }
   let(:password) { 'password123' }
-  let(:valid_params) {
+  let(:valid_params) do
     {
       first_name: first_name,
-      last_name: last_name,
-      username: username,
-      email: email,
-      password: password
+      last_name:  last_name,
+      username:   username,
+      email:      email,
+      password:   password,
     }
-  }
+  end
   let(:invalid_params) { valid_params.except(:first_name) }
   let(:user) { User.new(valid_params) }
   let(:user_with_error) { User.create(invalid_params) }
@@ -59,7 +59,7 @@ describe RegistrationService do
     context 'when a user is successfully created' do
       context 'when it creates a bucket successfully' do
         it 'returns the user' do
-          registered_user, _ = unregistered_user_subject.register
+          registered_user, = unregistered_user_subject.register
           expect(registered_user).to have_attributes(email: email, username: username)
         end
 
@@ -75,7 +75,7 @@ describe RegistrationService do
         end
 
         it 'deletes the user and raises exception' do
-          expect{unregistered_user_subject.register}.to raise_exception(RegistrationService::RegistrationError)
+          expect { unregistered_user_subject.register }.to raise_exception(RegistrationService::RegistrationError)
           expect(User.find_by(email: email)).to be_nil
         end
       end
@@ -85,7 +85,7 @@ describe RegistrationService do
       let(:user) { User.new(invalid_params) }
 
       it 'returns the user' do
-        registered_user, errors = unregistered_user_subject.register
+        registered_user, = unregistered_user_subject.register
         expect(registered_user).to have_attributes(email: email, username: username)
       end
 

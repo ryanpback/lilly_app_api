@@ -14,16 +14,11 @@ class ImagesController < ApplicationController
     else
       render json: { error: image.errors.to_hash(true) }, status: :conflict
     end
-
   rescue GcsManagementService::BucketExistsError
     render json: { error: 'Storage location already exists.' }, status: :conflict
   end
 
-  def show
-    #
-  end
+  def show; end
 
-  def destroy
-    #
-  end
+  def destroy; end
 end

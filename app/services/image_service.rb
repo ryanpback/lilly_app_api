@@ -6,7 +6,7 @@ class ImageService
   end
 
   def self.delete_image(image:)
-    self.new(image).delete
+    new(image).delete
   end
 
   def delete

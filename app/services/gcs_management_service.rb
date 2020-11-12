@@ -12,8 +12,8 @@ class GcsManagementService
     @bucket_name = bucket_id
     @storage_client =
       Google::Cloud::Storage.new(
-        project: PROJECT_ID,
-        credentials: CREDENTIALS_FILE
+        project:     PROJECT_ID,
+        credentials: CREDENTIALS_FILE,
       )
   end
 
@@ -32,12 +32,14 @@ class GcsManagementService
   def delete_file(filename:)
     file = get_file(filename: filename)
     return file.delete if file
+
     true
   end
 
   def delete_bucket
-    bucket.files.each { |f| f.delete }
+    bucket.files.each(&:delete)
     return true if bucket.delete
+
     false
   end
 
@@ -54,8 +56,8 @@ class GcsManagementService
   def create_bucket
     storage_client.create_bucket(
       bucket_name,
-      location: 'US-WEST2',
-      storage_class: 'STANDARD'
+      location:      'US-WEST2',
+      storage_class: 'STANDARD',
     )
   rescue Google::Cloud::AlreadyExistsError => e
     raise BucketExistsError, e.message

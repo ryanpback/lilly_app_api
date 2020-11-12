@@ -13,8 +13,8 @@ describe BucketService do
     before do
       allow(GcsManagementService).to receive(:new)
         .with(bucket.id).and_return(gcs_service)
-      allow(bucket.images).to receive(:create).with(filename: filename)
-        .and_return(image)
+      allow(bucket.images).to receive(:create)
+        .with(filename: filename).and_return(image)
     end
 
     context 'when an image saves to a bucket' do

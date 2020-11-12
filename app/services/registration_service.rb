@@ -8,11 +8,11 @@ class RegistrationService
   end
 
   def self.complete_registration(user:)
-    self.new(user).register
+    new(user).register
   end
 
   def self.unregister_user(user:)
-    self.new(user).unregister
+    new(user).unregister
   end
 
   # Save user and create a bucket to get a unique bucket UUID.
@@ -22,10 +22,10 @@ class RegistrationService
     if user.save
       begin
         user.create_bucket
-      rescue # Not sure what error could/would be thrown - catch all
+      rescue StandardError # Not sure what error could/would be thrown - catch all
         user.destroy
 
-        raise RegistrationError.new("Something went wrong creating the user. Try again.")
+        raise RegistrationError, 'Something went wrong creating the user. Try again.'
       end
     end
 
@@ -37,13 +37,9 @@ class RegistrationService
     deleted_from_gcs =
       GcsManagementService.new(bucket.id).delete_bucket
 
-    unless deleted_from_gcs
-      return false
-    end
+    return false unless deleted_from_gcs
 
-    unless bucket.destroy
-      return false
-    end
+    return false unless bucket.destroy
 
     user.destroy
 

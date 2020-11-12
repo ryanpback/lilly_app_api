@@ -1,6 +1,3 @@
-require 'yaml'
-require 'yaml/store'
-
 class ImageValidator
   IMAGE_UPLOAD_NAME =
     Rails.application.credentials.image_upload_name.to_sym.freeze
@@ -11,7 +8,7 @@ class ImageValidator
     image/png
     image/heic
     video/quicktime
-  )
+  ).freeze
 
   attr_accessor :image, :error, :status
 
@@ -20,7 +17,7 @@ class ImageValidator
   end
 
   def self.validate!(params:)
-    self.new(params).determine_validity
+    new(params).determine_validity
   end
 
   def determine_validity
@@ -40,13 +37,11 @@ class ImageValidator
   private
 
   def valid_file_type?
-
-    store = YAML::Store.new 'image.yaml'
-
     file_type =
       IO.popen(
-        ["file", "--brief", "--mime-type", image.path],
-        in: :close, err: :close
+        ['file', '--brief', '--mime-type', image.path],
+        in:  :close,
+        err: :close,
       ) { |io| io.read.chomp }
 
     ALLOWED_IMAGE_TYPES.include?(file_type)

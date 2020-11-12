@@ -1,19 +1,17 @@
 class UsersController < ApplicationController
   skip_before_action :authorize,
-    only: %i[register login]
+                     only: %i(register login)
 
   def register
     @user         = User.new(user_params)
     @user, errors = RegistrationService.complete_registration(user: @user)
 
-    unless errors.blank?
-      return render json: { error: errors.to_hash(true) }, status: :conflict
-    end
+    return render json: { error: errors.to_hash(true) }, status: :conflict unless errors.blank?
 
     token = AuthorizationService.encode_token({ user_id: @user.id })
     response = {
       message: "User #{@user.username} created successfully",
-      token: token
+      token:   token,
     }
 
     render json: response, status: :created
@@ -28,14 +26,14 @@ class UsersController < ApplicationController
       token = AuthorizationService.encode_token({ user_id: @user.id })
 
       response = {
-        user: {
-          id: @user.id,
+        user:  {
+          id:         @user.id,
           first_name: @user.first_name,
-          last_name: @user.last_name,
-          username: @user.username,
-          emai: @user.email
+          last_name:  @user.last_name,
+          username:   @user.username,
+          emai:       @user.email,
         },
-        token: token
+        token: token,
       }
 
       render json: response, status: :ok

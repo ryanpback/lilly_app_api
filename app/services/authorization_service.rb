@@ -31,15 +31,16 @@ class AuthorizationService
   end
 
   def decoded_token
-    @decoded_token ||= begin
-      return nil unless auth_header
-
-      token = auth_header.split(' ')[1]
+    @decoded_token ||=
       begin
-        JWT.decode(token, SECRET_KEY, true, algorithm: 'HS256')
-      rescue JWT::DecodeError
-        nil
+        return nil unless auth_header
+
+        token = auth_header.split(' ')[1]
+        begin
+          JWT.decode(token, SECRET_KEY, true, algorithm: 'HS256')
+        rescue JWT::DecodeError
+          nil
+        end
       end
-    end
   end
 end

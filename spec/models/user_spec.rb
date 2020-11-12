@@ -6,15 +6,15 @@ describe User do
   let(:username) { 'testuser' }
   let(:email) { 'testuser@test.com' }
   let(:password) { 'password123' }
-  let(:params) {
+  let(:params) do
     {
       first_name: first_name,
-      last_name: last_name,
-      username: username,
-      email: email,
-      password: password
+      last_name:  last_name,
+      username:   username,
+      email:      email,
+      password:   password,
     }
-  }
+  end
   let(:user) { described_class.create(params) }
   let(:bucket) { user.create_bucket }
   let(:filename1) { 'testfile1' }
@@ -44,7 +44,7 @@ describe User do
     end
   end
 
-  describe ".create_user" do
+  describe '.create_user' do
     context 'when all data is present and valid' do
       it 'produces no errors when saving' do
         expect(described_class.create(params).errors).to be_blank
@@ -57,7 +57,7 @@ describe User do
 
         it 'fails to save with error message' do
           user = described_class.create(params)
-          expect(user.errors.messages.to_s).to match(/first_name.+can\'t be blank/)
+          expect(user.errors.messages.to_s).to match(/first_name.+can't be blank/)
         end
       end
 
@@ -66,7 +66,7 @@ describe User do
 
         it 'fails to save with error message' do
           user = described_class.create(params)
-          expect(user.errors.messages.to_s).to match(/last_name.+can\'t be blank/)
+          expect(user.errors.messages.to_s).to match(/last_name.+can't be blank/)
         end
       end
 
@@ -75,7 +75,7 @@ describe User do
 
         it 'fails to save with error message' do
           user = described_class.create(params)
-          expect(user.errors.messages.to_s).to match(/username.+can\'t be blank/)
+          expect(user.errors.messages.to_s).to match(/username.+can't be blank/)
         end
       end
 
@@ -84,7 +84,7 @@ describe User do
 
         it 'fails to save with error message' do
           user = described_class.create(params)
-          expect(user.errors.messages.to_s).to match(/email.+can\'t be blank/)
+          expect(user.errors.messages.to_s).to match(/email.+can't be blank/)
         end
       end
 
@@ -93,7 +93,7 @@ describe User do
 
         it 'fails to save with error message' do
           user = described_class.create(params)
-          expect(user.errors.messages.to_s).to match(/password.+can\'t be blank/)
+          expect(user.errors.messages.to_s).to match(/password.+can't be blank/)
         end
       end
     end
@@ -135,7 +135,13 @@ describe User do
 
         it 'fails to save with error message' do
           described_class.create(params)
-          user = described_class.create(first_name: first_name, last_name: last_name, username: username, email: non_duplicate_email, password: password)
+          user = described_class.create(
+            first_name: first_name,
+            last_name:  last_name,
+            username:   username,
+            email:      non_duplicate_email,
+            password:   password,
+          )
 
           expect(user.errors.messages.to_s).to match(/username.+already been taken/)
         end
@@ -148,7 +154,13 @@ describe User do
 
         it 'fails to save with error message' do
           described_class.create(params)
-          user = described_class.create(first_name: first_name, last_name: last_name, username: non_duplicate_username, email: email, password: password)
+          user = described_class.create(
+            first_name: first_name,
+            last_name:  last_name,
+            username:   non_duplicate_username,
+            email:      email,
+            password:   password,
+          )
 
           expect(user.errors.messages.to_s).to match(/email.+already been taken/)
         end

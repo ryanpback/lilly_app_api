@@ -2,10 +2,18 @@ require 'spec_helper'
 
 describe ImageValidator do
   let(:file_path) { './spec/support/files/test.png' }
-  let(:file) { double(:file, size: 0.5.megabytes, content_type: 'image/png', original_filename: 'testfilename', path: file_path) }
+  let(:file) do
+    double(
+      :file,
+      size:              0.5.megabytes,
+      content_type:      'image/png',
+      original_filename: 'testfilename',
+      path:              file_path,
+    )
+  end
   let(:params) { {} }
   subject { described_class.new(params) }
-  let(:allowed_image_types) {
+  let(:allowed_image_types) do
     %w(
       image/gif
       image/jpeg
@@ -14,7 +22,7 @@ describe ImageValidator do
       image/heic
       video/quicktime
     )
-  }
+  end
 
   before do
     allow(params).to receive(:[])

@@ -1,0 +1,87 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'public/**/*'
+    - 'script/**/*'
+    - 'storage/**/*'
+    - 'test/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+
+Layout/FirstHashElementLineBreak:
+  Enabled: true
+Layout/CaseIndentation:
+  EnforcedStyle: end
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+Layout/HashAlignment:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: true
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+Style/AndOr:
+  EnforcedStyle: always
+Style/BarePercentLiterals:
+  EnforcedStyle: percent_q
+Style/ClassMethodsDefinitions:
+  Enabled: false
+Style/DoubleNegation:
+  Enabled: false
+Style/EmptyCaseCondition:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/MultilineIfModifier:
+  Enabled: false
+Style/NumericLiterals:
+  Enabled: false
+Style/OneLineConditional:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '()'
+    '%i': '()'
+    '%I': '()'
+    '%r': '()'
+    '%w': '()'
+    '%W': '()'
+Style/RedundantReturn:
+  AllowMultipleReturnValues: true
+Style/RescueModifier:
+  Enabled: false
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+
+Style/Documentation:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Lint/DuplicateMethods:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Lint/NonDeterministicRequireOrder:
+  Enabled: false
+Style/MixinUsage:
+  Exclude:
+    - 'spec/**/*'
+
+
