@@ -1,5 +1,6 @@
 class AuthorizationService
-  SECRET_KEY = Rails.application.secrets.secret_key_base.freeze
+  SECRET_KEY = Rails.application.secret_key_base.freeze
+  ENC_ALGORITHM = Rails.application.credentials.jwt[:enc_algorithm].freeze
 
   attr_reader :headers, :decoded_token
 
@@ -13,8 +14,19 @@ class AuthorizationService
     end
 
     def encode_token(payload, exp = 2.days.from_now)
-      payload[:exp] = exp.to_i
-      JWT.encode(payload, SECRET_KEY)
+      payload[:expiration] = exp.to_i
+      JWT.encode(payload, SECRET_KEY, ENC_ALGORITHM)
+    end
+
+    def decode_token(token)
+      JWT.decode(
+        token,
+        SECRET_KEY,
+        true,
+        algorithm: ENC_ALGORITHM,
+      )
+    rescue JWT::DecodeError
+      nil
     end
   end
 
@@ -31,16 +43,12 @@ class AuthorizationService
   end
 
   def decoded_token
+    return nil unless auth_header
+
     @decoded_token ||=
       begin
-        return nil unless auth_header
-
         token = auth_header.split(' ')[1]
-        begin
-          JWT.decode(token, SECRET_KEY, true, algorithm: 'HS256')
-        rescue JWT::DecodeError
-          nil
-        end
+        self.class.decode_token(token)
       end
   end
 end
