@@ -122,7 +122,7 @@ describe RegistrationService do
         allow(registered_user).to receive(:destroyed?).and_return(user_deletion_status)
       end
 
-      context 'when the user and bucket is deleted successfully' do
+      context 'when the user and bucket are deleted successfully' do
         it 'returns true' do
           expect(bucket).to receive(:destroy)
           expect(registered_user).to receive(:destroy)
