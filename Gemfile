@@ -36,9 +36,9 @@ group :development, :test do
   gem 'pry'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i(mri mingw x64_mingw)
-  gem 'rspec-rails', '~> 3.8'
   gem 'guard'
   gem 'guard-rspec', require: false
+  gem 'rspec-rails', '~> 3.8'
 end
 
 group :development do

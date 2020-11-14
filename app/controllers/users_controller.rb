@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   def register
     @user         = User.new(user_params)
     @user, errors = RegistrationService.complete_registration(user: @user)
-
     return render json: { error: errors.to_hash(true) }, status: :conflict unless errors.blank?
 
     token = AuthorizationService.encode_token({ user_id: @user.id })
@@ -22,26 +21,23 @@ class UsersController < ApplicationController
   def login
     @user = User.find_by(username: params[:username])
 
-    if @user&.authenticate(params[:password])
-      token = AuthorizationService.encode_token({ user_id: @user.id })
+    return render json:   { error: 'Invalid username or password' },
+                  status: :unauthorized unless @user&.authenticate(params[:password])
 
-      response = {
-        user:  {
-          id:         @user.id,
-          first_name: @user.first_name,
-          last_name:  @user.last_name,
-          username:   @user.username,
-          emai:       @user.email,
-        },
-        token: token,
-      }
+    token = AuthorizationService.encode_token({ user_id: @user.id })
 
-      render json: response, status: :ok
-    else
-      response = { error: 'Invalid username or password' }
+    response = {
+      user:  {
+        id:         @user.id,
+        first_name: @user.first_name,
+        last_name:  @user.last_name,
+        username:   @user.username,
+        email:      @user.email,
+      },
+      token: token,
+    }
 
-      render json: response, status: :unauthorized
-    end
+    render json: response, status: :ok
   end
 
   def destroy
@@ -49,9 +45,9 @@ class UsersController < ApplicationController
       RegistrationService.unregister_user(user: @current_user)
 
     if user_deleted
-      render json: { message: 'Successfully unregistered from LillyApp' }, status: :no_content
+      render json: {}, status: :no_content
     else
-      render json: { error: 'Failed to unregister. Please try again.' }, status: :reset_content
+      render json: {}, status: :reset_content
     end
   end
 
