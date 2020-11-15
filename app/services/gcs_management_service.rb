@@ -1,5 +1,4 @@
 require 'google/cloud/storage'
-require 'yaml/store'
 
 class GcsManagementService
   class BucketExistsError < StandardError; end
@@ -43,16 +42,6 @@ class GcsManagementService
     false
   end
 
-  private
-
-  def bucket
-    @bucket ||= storage_client.bucket(bucket_name)
-  end
-
-  def bucket_exists?
-    !!bucket
-  end
-
   def create_bucket
     storage_client.create_bucket(
       bucket_name,
@@ -61,5 +50,15 @@ class GcsManagementService
     )
   rescue Google::Cloud::AlreadyExistsError => e
     raise BucketExistsError, e.message
+  end
+
+  private
+
+  def bucket
+    @bucket ||= storage_client.bucket(bucket_name)
+  end
+
+  def bucket_exists?
+    !!bucket
   end
 end
