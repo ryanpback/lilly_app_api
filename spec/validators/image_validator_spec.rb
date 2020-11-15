@@ -1,15 +1,13 @@
 require 'spec_helper'
 
 describe ImageValidator do
-  let(:file_path) { './spec/support/files/test.png' }
-  let(:file) do
-    double(
-      :file,
-      size:              0.5.megabytes,
-      content_type:      'image/png',
-      original_filename: 'testfilename',
-      path:              file_path,
-    )
+  let(:filename) { 'test.png' }
+  let(:file_type) { 'image/png' }
+  let(:path_to_file) do
+    Rails.root.join "spec/support/files/#{filename}"
+  end
+  let(:uploaded_file) do
+    Rack::Test::UploadedFile.new(path_to_file, file_type)
   end
   let(:params) { {} }
   subject { described_class.new(params) }
@@ -26,7 +24,8 @@ describe ImageValidator do
 
   before do
     allow(params).to receive(:[])
-      .with(described_class::IMAGE_UPLOAD_NAME).and_return(file)
+      .with(described_class::IMAGE_UPLOAD_NAME)
+      .and_return(uploaded_file)
     allow(described_class).to receive(:new)
       .and_return(subject)
   end
@@ -57,7 +56,9 @@ describe ImageValidator do
     end
 
     context 'when the image is invalid' do
-      let(:file_path) { '.spec/support/files/invalid_file.txt' }
+      let(:filename) { 'invalid_file.txt' }
+      let(:file_type) { 'text/plain' }
+
       context 'when params[upload_name] is nil' do
         before do
           allow(subject.image).to receive(:present?)
