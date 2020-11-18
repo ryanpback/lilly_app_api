@@ -1,6 +1,5 @@
 class ImageValidator
-  IMAGE_UPLOAD_NAME =
-    Rails.application.credentials.image_upload_name.to_sym.freeze
+  IMAGE_UPLOAD_NAME = 'lilly_app_upload'.freeze
   ALLOWED_IMAGE_TYPES = %w(
     image/gif
     image/jpeg

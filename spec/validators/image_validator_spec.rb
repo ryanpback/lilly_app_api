@@ -9,7 +9,7 @@ describe ImageValidator do
   let(:uploaded_file) do
     Rack::Test::UploadedFile.new(path_to_file, file_type)
   end
-  let(:params) { {} }
+  let(:params) { { lilly_app_upload: uploaded_file } }
   subject { described_class.new(params) }
   let(:allowed_image_types) do
     %w(
@@ -24,7 +24,7 @@ describe ImageValidator do
 
   before do
     allow(params).to receive(:[])
-      .with(described_class::IMAGE_UPLOAD_NAME)
+      .with('lilly_app_upload')
       .and_return(uploaded_file)
     allow(described_class).to receive(:new)
       .and_return(subject)
@@ -59,7 +59,7 @@ describe ImageValidator do
       let(:filename) { 'invalid_file.txt' }
       let(:file_type) { 'text/plain' }
 
-      context 'when params[upload_name] is nil' do
+      context 'when params[lilly_app_upload] is nil' do
         before do
           allow(subject.image).to receive(:present?)
             .and_return(false)
