@@ -7,7 +7,8 @@ class BucketService
 
   def save_image!(filename:)
     image = bucket.images.create(filename: filename)
-    GcsManagementService.new(bucket.id).delete_file(filename: filename) unless image.valid?
+    GcsManagementService.new(bucket.id)
+                        .delete_file(filename: filename) unless image.valid?
 
     image
   end
