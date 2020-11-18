@@ -42,6 +42,11 @@ describe User do
       expect(image.filename).to eq(filename1)
       expect(image.filename).to_not eq(filename2)
     end
+
+    it 'should return nil if the image does\'t exist' do
+      image = user.user_image_by_id('r4nd0m-im4g3-id')
+      expect(image).to be_nil
+    end
   end
 
   describe '.create_user' do
