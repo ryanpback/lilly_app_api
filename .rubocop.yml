@@ -22,6 +22,7 @@ Layout/FirstHashElementIndentation:
 Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
+  EnforcedLastArgumentHashStyle: always_ignore
 Layout/MultilineAssignmentLayout:
   Enabled: true
 Layout/MultilineMethodArgumentLineBreaks:
