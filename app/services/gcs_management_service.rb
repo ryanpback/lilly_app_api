@@ -24,8 +24,7 @@ class GcsManagementService
   end
 
   def get_file(filename:)
-    file_path = "#{bucket_name}/#{filename}"
-    bucket.file(file_path)
+    bucket.file(filename)
   end
 
   def delete_file(filename:)
@@ -50,6 +49,11 @@ class GcsManagementService
     )
   rescue Google::Cloud::AlreadyExistsError => e
     raise BucketExistsError, e.message
+  end
+
+  def generate_signed_url(filename:)
+    storage_expiry_time = 5 * 60 # 5 minutes
+    storage_client.signed_url(bucket_name, filename, method: 'GET', expires: storage_expiry_time, version: :v4)
   end
 
   private

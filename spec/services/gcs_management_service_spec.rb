@@ -65,14 +65,10 @@ describe GcsManagementService do
   end
 
   describe '#get_file' do
-    before do
-      allow(gcs_bucket).to receive(:file)
-        .with("#{bucket_name}/#{filename}").and_return(gcs_file)
-    end
-
     it 'returns a gcs file' do
       expect(gcs_bucket).to receive(:file)
-        .with("#{bucket_name}/#{filename}")
+        .with(filename)
+        .and_return(gcs_file)
       file = subject.get_file(filename: filename)
       expect(file).to eq(gcs_file)
     end
@@ -80,30 +76,21 @@ describe GcsManagementService do
 
   describe '#delete_file' do
     context 'when the gcs_file exists' do
-      before do
-        allow(subject).to receive(:get_file)
-          .with(filename: filename).and_return(gcs_file)
-        allow(gcs_file).to receive(:delete).and_return(true)
-      end
-
       it 'returns true' do
         expect(subject).to receive(:get_file)
           .with(filename: filename)
-        expect(gcs_file).to receive(:delete)
+          .and_return(gcs_file)
+        expect(gcs_file).to receive(:delete).and_return(true)
         deleted = subject.delete_file(filename: filename)
         expect(deleted).to be true
       end
     end
 
     context 'when the gcs_file doesn\'t exists' do
-      before do
-        allow(subject).to receive(:get_file)
-          .with(filename: filename).and_return(nil)
-      end
-
       it 'returns true' do
         expect(subject).to receive(:get_file)
           .with(filename: filename)
+          .and_return(nil)
         deleted = subject.delete_file(filename: filename)
         expect(deleted).to be true
       end
@@ -114,7 +101,6 @@ describe GcsManagementService do
     before do
       allow(gcs_bucket).to receive(:files)
         .and_return([gcs_file])
-      allow(gcs_file).to receive(:delete).and_return(true)
     end
 
     context 'when a bucket is successfully delete' do
@@ -125,7 +111,7 @@ describe GcsManagementService do
 
       it 'returns true' do
         expect(gcs_bucket).to receive(:files)
-        expect(gcs_file).to receive(:delete)
+        expect(gcs_file).to receive(:delete).and_return(true)
         expect(gcs_bucket).to receive(:delete)
         expect(subject.delete_bucket).to be true
       end
@@ -169,6 +155,13 @@ describe GcsManagementService do
       it 'rescues a Google::Cloud::AlreadyExistsError and returns a BucketExistsError' do
         expect { subject.create_bucket }.to raise_exception(GcsManagementService::BucketExistsError, error_message)
       end
+    end
+  end
+
+  describe '#generate_signed_url' do
+    it 'generates a url from a gcs_file' do
+      url = subject.generate_signed_url(filename: filename)
+      expect(url).to match(/^https:\/\//)
     end
   end
 end
